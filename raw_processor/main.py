@@ -9,7 +9,7 @@ from image_processor import process_raw_to_png
 # --- CONFIGURATION ---
 INPUT_DIRECTORY = "input_raw_images"
 # --- CHANGE 1: The output directory is now named for JPG files. ---
-OUTPUT_DIRECTORY = "output_jpg_images"
+OUTPUT_DIRECTORY = "output_jpg_images_postEnhanc"
 MAX_THREADS = os.cpu_count()
 BATTERY_PERCENTAGE_THRESHOLD = 10
 
