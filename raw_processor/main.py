@@ -8,7 +8,7 @@ from image_processor import process_raw_to_png, PROCESSOR_TYPE
 
 # --- CONFIGURATION ---
 INPUT_DIRECTORY = "input_raw_images"
-OUTPUT_DIRECTORY = "output_png_images"
+OUTPUT_DIRECTORY = "output_png_images_reduced_size" # You can rename this to output_jpg_images if you want
 MAX_THREADS = os.cpu_count()
 
 def main():
@@ -33,14 +33,13 @@ def main():
     
     total_start_time = time.time()
     
-    results_list = [] # List to store detailed results for the final summary
+    results_list = [] 
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
         future_to_file = {executor.submit(process_raw_to_png, raw_path, OUTPUT_DIRECTORY): raw_path for raw_path in raw_files}
         
         for future in concurrent.futures.as_completed(future_to_file):
             try:
-                # Unpack the new, detailed return values
                 file_name, success, error_msg, raw_size, final_size = future.result()
                 results_list.append({
                     "filename": file_name,
@@ -59,7 +58,6 @@ def main():
 
     total_end_time = time.time()
 
-    # --- FINAL SUMMARY ---
     success_count = sum(1 for r in results_list if r['success'])
     failure_count = len(results_list) - success_count
     
@@ -70,20 +68,20 @@ def main():
     print(f"Failed to process: {failure_count} images.")
     print(f"Output files are located in the '{OUTPUT_DIRECTORY}' folder.")
     
-    # --- DETAILED FILE SIZE SUMMARY ---
     if results_list:
         print("-" * 38)
         print("--- File Size Summary ---")
-        results_list.sort(key=lambda x: x['filename']) # Sort for consistent order
+        results_list.sort(key=lambda x: x['filename'])
         
         for result in results_list:
             if result['success']:
                 size_change = ((result['final_size_mb'] - result['raw_size_mb']) / result['raw_size_mb']) * 100
                 change_str = f"(+{size_change:.1f}%)" if size_change > 0 else f"({size_change:.1f}%)"
                 
+                # --- CHANGE: Updated the label from PNG to JPG ---
                 print(f"  - {result['filename']:<25} | "
                       f"RAW: {result['raw_size_mb']:>5.2f} MB -> "
-                      f"PNG: {result['final_size_mb']:>5.2f} MB {change_str}")
+                      f"JPG: {result['final_size_mb']:>5.2f} MB {change_str}")
             else:
                 print(f"  - {result['filename']:<25} | FAILED. Error: {result['error']}")
     
