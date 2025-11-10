@@ -1,4 +1,4 @@
-# main.py
+
 import os
 import glob
 import time
@@ -6,9 +6,9 @@ import concurrent.futures
 from utils import setup_directories, check_battery_status
 from image_processor import process_raw_to_png
 
-# --- CONFIGURATION ---
+
 INPUT_DIRECTORY = "input_raw_images"
-# --- CHANGE 1: The output directory is now named for JPG files. ---
+
 OUTPUT_DIRECTORY = "output_jpg_images_postEnhanc"
 MAX_THREADS = os.cpu_count()
 BATTERY_PERCENTAGE_THRESHOLD = 10
@@ -79,7 +79,7 @@ def main():
             if result['success']:
                 size_change = ((result['final_size_mb'] - result['raw_size_mb']) / result['raw_size_mb']) * 100
                 change_str = f"(+{size_change:.1f}%)" if size_change > 0 else f"({size_change:.1f}%)"
-                # --- CHANGE 2: The report label is now "JPG" for clarity. ---
+                
                 print(f"  - {result['filename']:<25} | "
                       f"RAW: {result['raw_size_mb']:>5.2f} MB -> "
                       f"JPG: {result['final_size_mb']:>5.2f} MB {change_str}")
