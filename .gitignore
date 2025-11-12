@@ -11,6 +11,9 @@ output_png_images/
 output_jpg_images/
 output_images/
 *.log
+report.docx
+report.pdf
+python_code.rar
 
 # --- Python Cache ---
 # Ignore the bytecode files that Python generates for performance.
